@@ -4,7 +4,6 @@ app = bottle.Bottle()
 
 @app.route("/")
 def home():
-	with open("pages/home.html") as home_html:
-		return "".join(home_html.readlines())
+	return bottle.template("home.html")
 
 bottle.run(app)
