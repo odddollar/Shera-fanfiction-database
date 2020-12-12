@@ -6,4 +6,4 @@ app = bottle.Bottle()
 def home():
 	return bottle.template("home.html")
 
-bottle.run(app)
+bottle.run(app, debug=True)
