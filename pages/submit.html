@@ -7,5 +7,24 @@
 <body>
     <p><a href="/">Home</a> <a href="/database">Database</a></p>
     <hr>
+    <h2>Submit new entry</h2>
+    <form method="post" action="/submit">
+        <table>
+            <tr>
+                <td>URL: <input name="url"></td>
+                <td>Title: <input name="title"></td>
+                <td>Author: <input name="author"></td>
+                <td>Rating: <input name="rating"></td>
+            </tr>
+            <tr>
+                <td>Warnings: <input name="warnings"></td>
+                <td>Summary: <input name="summary"></td>
+                <td>Notes: <input name="notes"></td>
+            </tr>
+        </table>
+        <input type="submit" value="Submit entry">
+    </form>
+
+    <p>{{message}}</p>
 </body>
 </html>
