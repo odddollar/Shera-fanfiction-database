@@ -1,4 +1,5 @@
 import bottle
+import sqlite3
 
 app = bottle.Bottle()
 
@@ -23,17 +24,21 @@ def submit_handler():
 	entry_data["summary"] = bottle.request.forms.get("summary")
 	entry_data["notes"] = bottle.request.forms.get("notes")
 
-	message = ""
-
 	for i in entry_data.keys():
 		if entry_data[i] is "":
 			entry_data[i] = "N/A"
-		message += entry_data[i] + ", "
 
-	return bottle.template("submit.html", message=message)
+	return bottle.template("submit.html", message="message")
 
 @app.route("/database")
 def database():
-	return bottle.template("database.html")
+	con = sqlite3.connect("fanfictions.db")
+	db = con.cursor()
+
+	db.execute("SELECT * FROM fanfictions")
+	result = db.fetchall()
+	db.close()
+
+	return bottle.template("database.html", rows=result)
 
 bottle.run(app, debug=True)

@@ -7,5 +7,21 @@
 <body>
     <p><a href="/">Home</a> <a href="/submit">Submit</a></p>
     <hr>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>URL</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Rating</th>
+        </tr>
+        %for row in rows:
+            <tr>
+                %for col in row:
+                    <td>{{col}}</td>
+                %end
+            </tr>
+        %end
+    </table>
 </body>
 </html>
