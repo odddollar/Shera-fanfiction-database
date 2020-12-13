@@ -28,7 +28,11 @@ def submit_handler():
 		if entry_data[i] is "":
 			entry_data[i] = "N/A"
 
-	return bottle.template("submit.html", message="message")
+	db = sqlite3.connect("fanfictions.db")
+	db.execute(f"INSERT INTO fanfictions (url, title, author, rating) VALUES ('{entry_data['url']}', '{entry_data['title']}', '{entry_data['author']}', '{entry_data['rating']}')")
+	db.commit()
+
+	return bottle.template("submit.html", message="Submitted!")
 
 @app.route("/database")
 def database():
