@@ -37,7 +37,7 @@ def submit_handler():
 	db.execute(f"INSERT INTO fanfictions (url, title, author, rating, warnings, summary, notes) VALUES ('{entry_data['url']}', '{entry_data['title']}', '{entry_data['author']}', '{entry_data['rating']}', '{entry_data['warnings']}', '{entry_data['summary']}', '{entry_data['notes']}')")
 	db.commit()
 
-	return bottle.template("submit.html", message="Submitted!")
+	return bottle.template("submit.html", message="success")
 
 @app.route("/database")
 def database():

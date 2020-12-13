@@ -25,6 +25,8 @@
         <input type="submit" value="Submit entry">
     </form>
 
-    <p>{{message}}</p>
+    %if message == "success":
+        <script>alert("Sucessfully submitted!")</script>
+    %end
 </body>
 </html>
