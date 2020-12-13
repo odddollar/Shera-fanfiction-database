@@ -2,6 +2,9 @@ import bottle
 import sqlite3
 
 app = bottle.Bottle()
+db = sqlite3.connect("fanfictions.db")
+db.execute("CREATE TABLE IF NOT EXISTS fanfictions (id INTEGER PRIMARY KEY AUTOINCREMENT, url TEXT, title TEXT, author TEXT, rating TEXT, warnings TEXT, summary TEXT, notes TEXT)")
+db.commit()
 
 @app.route("/")
 @app.route("/home")
@@ -27,9 +30,11 @@ def submit_handler():
 	for i in entry_data.keys():
 		if entry_data[i] is "":
 			entry_data[i] = "N/A"
+		if "'" in entry_data[i]:
+			entry_data[i] = entry_data[i].replace("'", "")
 
 	db = sqlite3.connect("fanfictions.db")
-	db.execute(f"INSERT INTO fanfictions (url, title, author, rating) VALUES ('{entry_data['url']}', '{entry_data['title']}', '{entry_data['author']}', '{entry_data['rating']}')")
+	db.execute(f"INSERT INTO fanfictions (url, title, author, rating, warnings, summary, notes) VALUES ('{entry_data['url']}', '{entry_data['title']}', '{entry_data['author']}', '{entry_data['rating']}', '{entry_data['warnings']}', '{entry_data['summary']}', '{entry_data['notes']}')")
 	db.commit()
 
 	return bottle.template("submit.html", message="Submitted!")
