@@ -14,10 +14,28 @@
                 <td>URL: <input name="url"></td>
                 <td>Title: <input name="title"></td>
                 <td>Author: <input name="author"></td>
-                <td>Rating: <input name="rating"></td>
+                <td>
+                    Rating:
+                    <select name="rating">
+                        <option value="General Audiences">General Audiences</option>
+                        <option value="Teen And Up Audiences">Teen And Up Audiences</option>
+                        <option value="Mature">Mature</option>
+                        <option value="Explicit">Explicit</option>
+                        <option value="Unrated">Unrated</option>
+                    </select>
+                </td>
             </tr>
             <tr>
-                <td>Warnings: <input name="warnings"></td>
+                <td>
+                    Warnings:
+                    <select name="warnings">
+                        <option value="No warnings">No warnings</option>
+                        <option value="Graphic depictions of violence">Graphic depictions of violence</option>
+                        <option value="Major character death">Major character death</option>
+                        <option value="Rape/non-con">Rape/non-con</option>
+                        <option value="Underage sex">Underage sex</option>
+                    </select>
+                </td>
                 <td>Summary: <input name="summary"></td>
                 <td>Notes: <input name="notes"></td>
             </tr>
