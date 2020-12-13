@@ -34,6 +34,9 @@ def submit_handler():
 		if "'" in entry_data[i]:
 			entry_data[i] = entry_data[i].replace("'", "")
 
+	if (not "archiveofourown.org" in entry_data["url"]) or (entry_data["title"] == "N/A") or (entry_data["author"] == "N/A")  or (entry_data["summary"] == "N/A"):
+		return bottle.template("submit.html", message="unfilled")
+
 	db = sqlite3.connect("fanfictions.db")
 	db.execute(f"INSERT INTO fanfictions (url, title, author, rating, warnings, universe, summary, notes) VALUES ('{entry_data['url']}', '{entry_data['title']}', '{entry_data['author']}', '{entry_data['rating']}', '{entry_data['warnings']}', '{entry_data['universe']}', '{entry_data['summary']}', '{entry_data['notes']}')")
 	db.commit()

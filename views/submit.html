@@ -60,5 +60,8 @@
     %if message == "success":
         <script>alert("Sucessfully submitted!")</script>
     %end
+    %if message == "unfilled":
+        <script>alert("Ensure all required fields are filled")</script>
+    %end
 </body>
 </html>
