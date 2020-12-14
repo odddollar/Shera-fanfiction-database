@@ -9,6 +9,7 @@ if os.environ.get("APP_LOCATION") == "heroku":
 	conn = psycopg2.connect(DATABASE_URL, sslmode="require")
 else:
 	conn = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="localhost", port="5432")
+	DATABASE_URL = ""
 
 db_check = conn.cursor()
 db_check.execute("CREATE TABLE IF NOT EXISTS fanfictions (id SERIAL PRIMARY KEY, url TEXT, title TEXT, author TEXT, rating TEXT, warnings TEXT, universe TEXT, summary TEXT, notes TEXT)")
