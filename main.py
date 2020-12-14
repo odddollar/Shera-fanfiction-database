@@ -4,7 +4,16 @@ import os
 
 app = bottle.Bottle()
 
-conn = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="localhost", port="5432")
+if os.environ.get("APP_LOCATION") == "heroku":
+	DATABASE_URL = os.environ["DATABASE_URL"]
+	conn = psycopg2.connect(DATABASE_URL, sslmode="require")
+	temp_db = conn.cursor()
+	temp_db.execute("CREATE DATABASE fanfictions")
+	conn.commit()
+	conn.close()
+else:
+	conn = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="localhost", port="5432")
+
 db_check = conn.cursor()
 db_check.execute("CREATE TABLE IF NOT EXISTS fanfictions (id SERIAL PRIMARY KEY, url TEXT, title TEXT, author TEXT, rating TEXT, warnings TEXT, universe TEXT, summary TEXT, notes TEXT)")
 conn.commit()
