@@ -5,12 +5,11 @@ import os
 app = bottle.Bottle()
 
 if os.environ.get("APP_LOCATION") == "heroku":
-	DATABASE_URL = os.environ["DATABASE_URL"]
+	DATABASE_URL = os.environ.get("DATABASE_URL")
 	conn = psycopg2.connect(DATABASE_URL, sslmode="require")
+	conn.autocommit = True
 	temp_db = conn.cursor()
 	temp_db.execute("CREATE DATABASE fanfictions")
-	conn.commit()
-	conn.close()
 else:
 	conn = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="localhost", port="5432")
 
