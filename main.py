@@ -7,9 +7,6 @@ app = bottle.Bottle()
 if os.environ.get("APP_LOCATION") == "heroku":
 	DATABASE_URL = os.environ.get("DATABASE_URL")
 	conn = psycopg2.connect(DATABASE_URL, sslmode="require")
-	#conn.autocommit = True
-	#temp_db = conn.cursor()
-	#temp_db.execute("CREATE DATABASE fanfictions")
 else:
 	conn = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="localhost", port="5432")
 
@@ -49,7 +46,11 @@ def submit_handler():
 	if (not "archiveofourown.org" in entry_data["url"]) or (entry_data["title"] == "N/A") or (entry_data["author"] == "N/A")  or (entry_data["summary"] == "N/A"):
 		return bottle.template("submit.html", message="unfilled")
 
-	con = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="localhost", port="5432")
+	if not DATABASE_URL == "":
+		con = psycopg2.connect(DATABASE_URL, sslmode="require")
+	else:
+		con = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="localhost", port="5432")
+
 	db = con.cursor()
 	db.execute(f"INSERT INTO fanfictions (url, title, author, rating, warnings, universe, summary, notes) VALUES ('{entry_data['url']}', '{entry_data['title']}', '{entry_data['author']}', '{entry_data['rating']}', '{entry_data['warnings']}', '{entry_data['universe']}', '{entry_data['summary']}', '{entry_data['notes']}')")
 	con.commit()
@@ -59,9 +60,12 @@ def submit_handler():
 
 @app.route("/database")
 def database():
-	con = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="localhost", port="5432")
-	db = con.cursor()
+	if not DATABASE_URL == "":
+		con = psycopg2.connect(DATABASE_URL, sslmode="require")
+	else:
+		con = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="localhost", port="5432")
 
+	db = con.cursor()
 	db.execute("SELECT * FROM fanfictions")
 	result = db.fetchall()
 	con.close()
@@ -70,7 +74,11 @@ def database():
 
 @app.route("/remove/<entry_id>")
 def remove(entry_id):
-	con = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="localhost", port="5432")
+	if not DATABASE_URL == "":
+		con = psycopg2.connect(DATABASE_URL, sslmode="require")
+	else:
+		con = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="localhost", port="5432")
+
 	db = con.cursor()
 	db.execute(f"DELETE FROM fanfictions WHERE id={entry_id}")
 	con.commit()
