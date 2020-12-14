@@ -1,5 +1,6 @@
 import bottle
 import psycopg2
+import os
 
 app = bottle.Bottle()
 
@@ -69,4 +70,7 @@ def remove(entry_id):
 
 	return bottle.template("remove.html", id=entry_id)
 
-bottle.run(app, debug=True)
+if os.environ.get("APP_LOCATION") == "heroku":
+	bottle.run(app, host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+else:
+	bottle.run(app, host="localhost", port=8080, debug=True)
