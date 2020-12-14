@@ -1,10 +1,13 @@
 import bottle
-import sqlite3
+import psycopg2
 
 app = bottle.Bottle()
-db_check = sqlite3.connect("fanfictions.db")
-db_check.execute("CREATE TABLE IF NOT EXISTS fanfictions (id INTEGER PRIMARY KEY AUTOINCREMENT, url TEXT, title TEXT, author TEXT, rating TEXT, warnings TEXT, universe TEXT, summary TEXT, notes TEXT)")
-db_check.commit()
+
+conn = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="localhost", port="5432")
+db_check = conn.cursor()
+db_check.execute("CREATE TABLE IF NOT EXISTS fanfictions (id SERIAL PRIMARY KEY, url TEXT, title TEXT, author TEXT, rating TEXT, warnings TEXT, universe TEXT, summary TEXT, notes TEXT)")
+conn.commit()
+conn.close()
 
 @app.route("/")
 @app.route("/home")
@@ -37,28 +40,32 @@ def submit_handler():
 	if (not "archiveofourown.org" in entry_data["url"]) or (entry_data["title"] == "N/A") or (entry_data["author"] == "N/A")  or (entry_data["summary"] == "N/A"):
 		return bottle.template("submit.html", message="unfilled")
 
-	db = sqlite3.connect("fanfictions.db")
+	con = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="localhost", port="5432")
+	db = con.cursor()
 	db.execute(f"INSERT INTO fanfictions (url, title, author, rating, warnings, universe, summary, notes) VALUES ('{entry_data['url']}', '{entry_data['title']}', '{entry_data['author']}', '{entry_data['rating']}', '{entry_data['warnings']}', '{entry_data['universe']}', '{entry_data['summary']}', '{entry_data['notes']}')")
-	db.commit()
+	con.commit()
+	con.close()
 
 	return bottle.template("submit.html", message="success")
 
 @app.route("/database")
 def database():
-	con = sqlite3.connect("fanfictions.db")
+	con = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="localhost", port="5432")
 	db = con.cursor()
 
 	db.execute("SELECT * FROM fanfictions")
 	result = db.fetchall()
-	db.close()
+	con.close()
 
 	return bottle.template("database.html", rows=result)
 
 @app.route("/remove/<entry_id>")
 def remove(entry_id):
-	db = sqlite3.connect("fanfictions.db")
+	con = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="localhost", port="5432")
+	db = con.cursor()
 	db.execute(f"DELETE FROM fanfictions WHERE id={entry_id}")
-	db.commit()
+	con.commit()
+	con.close()
 
 	return bottle.template("remove.html", id=entry_id)
 
