@@ -2,9 +2,9 @@ import bottle
 import sqlite3
 
 app = bottle.Bottle()
-db = sqlite3.connect("fanfictions.db")
-db.execute("CREATE TABLE IF NOT EXISTS fanfictions (id INTEGER PRIMARY KEY AUTOINCREMENT, url TEXT, title TEXT, author TEXT, rating TEXT, warnings TEXT, universe TEXT, summary TEXT, notes TEXT)")
-db.commit()
+db_check = sqlite3.connect("fanfictions.db")
+db_check.execute("CREATE TABLE IF NOT EXISTS fanfictions (id INTEGER PRIMARY KEY AUTOINCREMENT, url TEXT, title TEXT, author TEXT, rating TEXT, warnings TEXT, universe TEXT, summary TEXT, notes TEXT)")
+db_check.commit()
 
 @app.route("/")
 @app.route("/home")
@@ -53,5 +53,13 @@ def database():
 	db.close()
 
 	return bottle.template("database.html", rows=result)
+
+@app.route("/remove/<entry_id>")
+def remove(entry_id):
+	db = sqlite3.connect("fanfictions.db")
+	db.execute(f"DELETE FROM fanfictions WHERE id={entry_id}")
+	db.commit()
+
+	return bottle.template("remove.html", id=entry_id)
 
 bottle.run(app, debug=True)
