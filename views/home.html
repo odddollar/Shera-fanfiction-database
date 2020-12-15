@@ -9,31 +9,30 @@
     <title>She-ra fanfiction database</title>
 </head>
 <body>
-    <div id="nav-bar">
-        <p><a href="/submit">Submit</a> <a href="/database">Database</a></p>
-        <hr>
-    </div>
-
+    <nav id="nav-bar" class="navbar navbar-expand-md navbar-light">
+        <a class="navbar-brand mx-auto" href="/">She-ra Fanfictions</a>
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active"><a id="home" class="nav-link" href="/">Home</a></li>
+            <li class="nav-item"><a id="submit" class="nav-link" href="/submit">Submit</a></li>
+            <li class="nav-item"><a id="database" class="nav-link" href="/database">Database</a></li>
+        </ul>
+    </nav>
     <div class="container-fluid">
-        <div id="title" class="jumbotron text-center">
-            <h1>She-ra recommended fanfictions database</h1>
-            <p>Created out of necessity as there are so many good fanfics recommended
+        <div id="title-box" class="jumbotron text-center">
+            <h1 id="title">She-ra recommended fanfictions database</h1>
+            <p id="title-text">Created out of necessity as there are so many good fanfics recommended
                 by the great people of <a href="https://www.archiveofourown.org/users/silkarc">silkarc</a>'s discord server. <br>
                 Upload your recommended AO3 fanfictions from the SUBMIT page. Please check if the fic has already been added before submitting.
             </p>
         </div>
-
-        <div id="content">
-            <div class="text-center">
-                <img src="../images/main_page.jpg" class="img-responsive" alt="Sher-ra">
-            </div>
+        <div id="content" class="text-center">
+            <img src="../images/main_page.jpg" class="img-responsive" alt="Sher-ra">
         </div>
-    </div>
-
-    <div id="footer" class="text-center">
         <hr>
-        <p>This is a very basic attempt at a database website that allows people to upload their recommended fics for others to see.<br>
-            Created by discord user odddollar#8495, a hobbyist programmer with no frontend/CSS or backend experience</p>
+        <div id="footer" class="text-center">
+            <p id="footer-text">This is a very basic attempt at a database website that allows people to upload their recommended fics for others to see.<br>
+                Created by discord user odddollar#8495, a hobbyist programmer with no frontend/CSS or backend experience</p>
+        </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
