@@ -24,85 +24,94 @@
         </ul>
     </nav>
     <div id="content" class="container-fluid">
+        <div class="jumbotron">
         <h2 id="title" class="text-center">Submit new entry</h2>
-        <form method="post" action="/submit">
-            <div class="row">
-                <div id="url-box" class="col-sm-4 text-center"><label>
-                    URL:
-                    <input name="url">
-                </label></div>
-                <div id="title-box" class="col-sm-4 text-center"><label>
-                    Title:
-                    <input name="title">
-                </label></div>
-                <div id="author-box" class="col-sm-4 text-center"><label>
-                    Author:
-                    <input name="author">
-                </label></div>
-            </div>
-            <div class="row">
-                <div id="rating-box" class="col-sm-4 text-center">
-                    <label>
-                        Rating:
-                        <select name="rating">
-                            <option value="General Audiences">General Audiences</option>
-                            <option value="Teen And Up Audiences">Teen And Up Audiences</option>
-                            <option value="Mature">Mature</option>
-                            <option value="Explicit">Explicit</option>
-                            <option value="Unrated">Unrated</option>
-                        </select>
-                    </label>
+            <form method="post" action="/submit">
+                <div class="row">
+                    <div id="url-box" class="col-sm-4 text-center"><label>
+                        URL:
+                        <input class="form-control" name="url">
+                    </label></div>
+                    <div id="title-box" class="col-sm-4 text-center"><label>
+                        Title:
+                        <input class="form-control" name="title">
+                    </label></div>
+                    <div id="author-box" class="col-sm-4 text-center"><label>
+                        Author:
+                        <input class="form-control" name="author">
+                    </label></div>
                 </div>
-                <div id="warning-box" class="col-sm-4 text-center">
-                    <label>
-                        Warnings:
-                        <select name="warnings">
-                            <option value="No warnings">No warnings</option>
-                            <option value="Graphic depictions of violence">Graphic depictions of violence</option>
-                            <option value="Major character death">Major character death</option>
-                            <option value="Rape/non-con">Rape/non-con</option>
-                            <option value="Underage sex">Underage sex</option>
-                        </select>
-                    </label>
+                <div class="row">
+                    <div id="rating-box" class="col-sm-4 text-center">
+                        <label>
+                            Rating:
+                            <select class="form-control text-center" name="rating">
+                                <option value="General Audiences">General Audiences</option>
+                                <option value="Teen And Up Audiences">Teen And Up Audiences</option>
+                                <option value="Mature">Mature</option>
+                                <option value="Explicit">Explicit</option>
+                                <option value="Unrated">Unrated</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div id="warning-box" class="col-sm-4 text-center">
+                        <label>
+                            Warnings:
+                            <select class="form-control text-center" name="warnings">
+                                <option value="No warnings">No warnings</option>
+                                <option value="Graphic depictions of violence">Graphic depictions of violence</option>
+                                <option value="Major character death">Major character death</option>
+                                <option value="Rape/non-con">Rape/non-con</option>
+                                <option value="Underage sex">Underage sex</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div id="universe-box" class="col-sm-4 text-center">
+                        <label>
+                            Universe:
+                            <select class="form-control text-center" name="universe">
+                                <option value="Canon">Canon</option>
+                                <option value="Post-canon">Post-canon</option>
+                                <option value="Modern AU">Modern AU</option>
+                                <option value="Magical realism AU">Magical realism AU</option>
+                                <option value="Historical AU">Historical AU</option>
+                                <option value="Celestial AU">Celestial AU</option>
+                                <option value="Science-fiction AU">Science-fiction AU</option>
+                                <option value="Other AU">Other AU</option>
+                            </select>
+                        </label>
+                    </div>
                 </div>
-                <div id="universe-box" class="col-sm-4 text-center">
-                    <label>
-                        Universe:
-                        <select name="universe">
-                            <option value="Canon">Canon</option>
-                            <option value="Post-canon">Post-canon</option>
-                            <option value="Modern AU">Modern AU</option>
-                            <option value="Magical realism AU">Magical realism AU</option>
-                            <option value="Historical AU">Historical AU</option>
-                            <option value="Celestial AU">Celestial AU</option>
-                            <option value="Science-fiction AU">Science-fiction AU</option>
-                            <option value="Other AU">Other AU</option>
-                        </select>
-                    </label>
+                <div class="row">
+                    <div id="summary-box" class="col-sm-6 text-center">
+                        <label for="summary-area">Summary:</label>
+                        <textarea id="summary-area" class="form-control" name="summary" rows="8" cols="50"></textarea>
+                    </div>
+                    <div id="notes-box" class="col-sm-6 text-center">
+                        <label for="notes-area">Notes:</label>
+                        <textarea id="notes-area" class="form-control" name="notes" rows="8" cols="50"></textarea>
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div id="summary-box" class="col-sm-6 text-center"><label>
-                    Summary:
-                    <textarea name="summary" rows="8" cols="50"></textarea>
-                </label></div>
-                <div id="notes-box" class="col-sm-6 text-center"><label>
-                    Notes:
-                    <textarea name="notes" rows="8" cols="50"></textarea>
-                </label></div>
-            </div>
-            <input type="submit" value="Submit entry">
-        </form>
+                <br>
+                <div class="row">
+                    <div id="submit-button" class="col-sm-12 text-center">
+                        <input type="submit" class="btn btn-dark" value="Submit entry">
+                    </div>
+                </div>
+            </form>
+        </div>
         <hr>
-        <p>All fields are required other than Notes</p>
+        <div id="footer" class="text-center">
+            <p>All fields are required other than Notes</p>
+        </div>
 
-        %if message == "success":
-            <script>alert("Sucessfully submitted!")</script>
-        %end
-        %if message == "unfilled":
-            <script>alert("Ensure all required fields are filled")</script>
-        %end
     </div>
+    %if message == "success":
+        <script>alert("Sucessfully submitted!")</script>
+    %end
+    %if message == "unfilled":
+        <script>alert("Ensure all required fields are filled")</script>
+    %end
 
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
