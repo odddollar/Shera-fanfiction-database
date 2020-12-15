@@ -87,6 +87,10 @@ def remove(entry_id):
 
 	return bottle.template("remove.html", id=entry_id)
 
+@app.route("/images/<filename:re:.*\.(png|jpg)>")
+def image(filename):
+	return bottle.static_file(filename, root="images/")
+
 if os.environ.get("APP_LOCATION") == "heroku":
 	bottle.run(app, host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
 else:
