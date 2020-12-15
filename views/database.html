@@ -17,30 +17,39 @@
             <li class="nav-item active"><a id="database" class="nav-link" href="/database">Database</a></li>
         </ul>
     </nav>
-    <table class="table table-striped table-bordered table-condensed">
-        <tr>
-            <th>ID</th>
-            <th>URL</th>
-            <th>Title</th>
-            <th>Author</th>
-            <th>Rating</th>
-            <th>Warnings</th>
-            <th>Universe</th>
-            <th>Summary</th>
-            <th>Notes</th>
-        </tr>
-        %for row in rows:
-            <tr>
-                %for col in row:
-                    %if not str(col).find("archiveofourown.org") == -1:
-                        <td><a href="{{col}}" target="_blank">{{col}}</a></td>
-                    %else:
-                        <td>{{col}}</td>
-                    %end
+    <div id="content" class="container-fluid">
+        <h2 id="title" class="text-center">Database</h2>
+        <table id="data" class="table table-striped table-condensed">
+            <thead id="column-headers">
+                <tr>
+                    <th>ID</th>
+                    <th>URL</th>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Rating</th>
+                    <th>Warnings</th>
+                    <th>Universe</th>
+                    <th>Summary</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                %for row in rows:
+                    <tr>
+                        %for col in range(len(row)):
+                            %if not str(row[col]).find("archiveofourown.org") == -1:
+                                <td><a href="{{row[col]}}" target="_blank">{{row[col]}}</a></td>
+                            %elif col == 0:
+                                <th scope="row">{{row[col]}}</th>
+                            %else:
+                                <td>{{row[col]}}</td>
+                            %end
+                        %end
+                    </tr>
                 %end
-            </tr>
-        %end
-    </table>
+            </tbody>
+        </table>
+    </div>
 
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
