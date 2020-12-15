@@ -6,6 +6,12 @@
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
+    <style>
+        textarea {
+            resize: none;
+        }
+    </style>
+
     <title>Submit fanfiction recommendations</title>
 </head>
 <body>
@@ -20,14 +26,23 @@
     <div id="content" class="container-fluid">
         <h2 id="title" class="text-center">Submit new entry</h2>
         <form method="post" action="/submit">
-            <table>
-                <tr>
-                    <td>URL: <input name="url"></td>
-                    <td>Title: <input name="title"></td>
-                    <td>Author: <input name="author"></td>
-                </tr>
-                <tr>
-                    <td>
+            <div class="row">
+                <div id="url-box" class="col-sm-4 text-center"><label>
+                    URL:
+                    <input name="url">
+                </label></div>
+                <div id="title-box" class="col-sm-4 text-center"><label>
+                    Title:
+                    <input name="title">
+                </label></div>
+                <div id="author-box" class="col-sm-4 text-center"><label>
+                    Author:
+                    <input name="author">
+                </label></div>
+            </div>
+            <div class="row">
+                <div id="rating-box" class="col-sm-4 text-center">
+                    <label>
                         Rating:
                         <select name="rating">
                             <option value="General Audiences">General Audiences</option>
@@ -36,8 +51,10 @@
                             <option value="Explicit">Explicit</option>
                             <option value="Unrated">Unrated</option>
                         </select>
-                    </td>
-                    <td>
+                    </label>
+                </div>
+                <div id="warning-box" class="col-sm-4 text-center">
+                    <label>
                         Warnings:
                         <select name="warnings">
                             <option value="No warnings">No warnings</option>
@@ -46,8 +63,10 @@
                             <option value="Rape/non-con">Rape/non-con</option>
                             <option value="Underage sex">Underage sex</option>
                         </select>
-                    </td>
-                    <td>
+                    </label>
+                </div>
+                <div id="universe-box" class="col-sm-4 text-center">
+                    <label>
                         Universe:
                         <select name="universe">
                             <option value="Canon">Canon</option>
@@ -59,13 +78,19 @@
                             <option value="Science-fiction AU">Science-fiction AU</option>
                             <option value="Other AU">Other AU</option>
                         </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Summary: <textarea name="summary" rows="8" cols="50"></textarea></td>
-                    <td>Notes: <textarea name="notes" rows="8" cols="50"></textarea></td>
-                </tr>
-            </table>
+                    </label>
+                </div>
+            </div>
+            <div class="row">
+                <div id="summary-box" class="col-sm-6 text-center"><label>
+                    Summary:
+                    <textarea name="summary" rows="8" cols="50"></textarea>
+                </label></div>
+                <div id="notes-box" class="col-sm-6 text-center"><label>
+                    Notes:
+                    <textarea name="notes" rows="8" cols="50"></textarea>
+                </label></div>
+            </div>
             <input type="submit" value="Submit entry">
         </form>
         <hr>
