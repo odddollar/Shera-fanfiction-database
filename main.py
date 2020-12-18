@@ -67,7 +67,7 @@ def database():
 		con = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="localhost", port="5432")
 
 	db = con.cursor()
-	db.execute("SELECT * FROM fanfictions")
+	db.execute("SELECT * FROM fanfictions ORDER BY id")
 	result = db.fetchall()
 	con.close()
 
@@ -98,6 +98,9 @@ def update():
 	data["id"] = bottle.request.forms.get("id")
 	data["column"] = bottle.request.forms.get("column")
 	data["value"] = bottle.request.forms.get("value")
+
+	if "'" in data["value"]:
+		data["value"] = data["value"].replace("'", "")
 
 	if not DATABASE_URL == "":
 		con = psycopg2.connect(DATABASE_URL, sslmode="require")
