@@ -87,6 +87,30 @@ def remove(entry_id):
 
 	return bottle.template("remove.html", id=entry_id)
 
+@app.route("/update")
+def render_update():
+	return bottle.template("update.html")
+
+@app.route("/update", method="POST")
+def update():
+	data = {}
+
+	data["id"] = bottle.request.forms.get("id")
+	data["column"] = bottle.request.forms.get("column")
+	data["value"] = bottle.request.forms.get("value")
+
+	if not DATABASE_URL == "":
+		con = psycopg2.connect(DATABASE_URL, sslmode="require")
+	else:
+		con = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="localhost", port="5432")
+
+	db = con.cursor()
+	db.execute(f"UPDATE fanfictions SET {data['column']}='{data['value']}' WHERE id={data['id']}")
+	con.commit()
+	con.close()
+
+	return bottle.template("home.html")
+
 @app.route("/images/<filename:re:.*\.(png|jpg)>")
 def image(filename):
 	return bottle.static_file(filename, root="images/")
