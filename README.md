@@ -7,5 +7,5 @@ A front-end for a database created to keep track of the numerous fanfictions rec
 - Database: PostgreSQL server hosted on Heroku
 - Entire app hosted on Heroku
 
-Site found at [shera-fanfiction-database.herokuapp.com](shera-fanfiction-database.herokuapp.com)
+Site found at [shera-fanfiction-database.herokuapp.com](https://www.shera-fanfiction-database.herokuapp.com)
 
