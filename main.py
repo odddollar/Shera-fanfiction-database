@@ -114,7 +114,7 @@ def update():
 
 	return bottle.template("home.html")
 
-@app.route("/images/<filename:re:.*\.(png|jpg)>")
+@app.route("/images/<filename:re:.*\.(png|jpg|ico)>")
 def image(filename):
 	return bottle.static_file(filename, root="images/")
 
