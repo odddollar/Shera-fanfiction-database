@@ -112,7 +112,7 @@ def update():
 	con.commit()
 	con.close()
 
-	return bottle.template("home.html")
+	return bottle.redirect("/")
 
 @app.route("/images/<filename:re:.*\.(png|jpg|ico)>")
 def image(filename):
