@@ -60,11 +60,11 @@
                         <tr>
                             %for col in range(len(row)):
                                 %if not str(row[col]).find("archiveofourown.org") == -1:
-                                    <td><a href="{{row[col]}}" target="_blank">{{row[col]}}</a></td>
+                                    <td class="text-center"><a href="{{row[col]}}" target="_blank">{{row[col]}}</a></td>
                                 %elif col == 0:
-                                    <th scope="row">{{row[col]}}</th>
+                                    <th class="text-center" scope="row">{{row[col]}}</th>
                                 %else:
-                                    <td>{{row[col]}}</td>
+                                    <td class="text-center">{{row[col]}}</td>
                                 %end
                             %end
                         </tr>
