@@ -1,6 +1,8 @@
 import bottle
 import psycopg2
 import os
+import requests
+from bs4 import BeautifulSoup
 
 app = bottle.Bottle()
 
@@ -13,6 +15,7 @@ else:
 
 db_check = conn.cursor()
 db_check.execute("CREATE TABLE IF NOT EXISTS fanfictions (id SERIAL PRIMARY KEY, url TEXT, title TEXT, author TEXT, rating TEXT, warnings TEXT, universe TEXT, summary TEXT, notes TEXT)")
+db_check.execute("ALTER TABLE fanfictions ADD COLUMN IF NOT EXISTS completion TEXT")
 conn.commit()
 conn.close()
 
@@ -47,13 +50,13 @@ def submit_handler():
 	if (not "archiveofourown.org" in entry_data["url"]) or (entry_data["title"] == "N/A") or (entry_data["author"] == "N/A")  or (entry_data["summary"] == "N/A"):
 		return bottle.template("submit.html", message="unfilled")
 
-	if not DATABASE_URL == "":
-		con = psycopg2.connect(DATABASE_URL, sslmode="require")
-	else:
+	if DATABASE_URL == "":
 		con = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="localhost", port="5432")
+	else:
+		con = psycopg2.connect(DATABASE_URL, sslmode="require")
 
 	db = con.cursor()
-	db.execute(f"INSERT INTO fanfictions (url, title, author, rating, warnings, universe, summary, notes) VALUES ('{entry_data['url']}', '{entry_data['title']}', '{entry_data['author']}', '{entry_data['rating']}', '{entry_data['warnings']}', '{entry_data['universe']}', '{entry_data['summary']}', '{entry_data['notes']}')")
+	db.execute(f"INSERT INTO fanfictions (url, title, author, rating, warnings, universe, summary, notes, completion) VALUES ('{entry_data['url']}', '{entry_data['title']}', '{entry_data['author']}', '{entry_data['rating']}', '{entry_data['warnings']}', '{entry_data['universe']}', '{entry_data['summary']}', '{entry_data['notes']}', 'Unknown')")
 	con.commit()
 	con.close()
 
@@ -61,10 +64,10 @@ def submit_handler():
 
 @app.route("/database")
 def database():
-	if not DATABASE_URL == "":
-		con = psycopg2.connect(DATABASE_URL, sslmode="require")
-	else:
+	if DATABASE_URL == "":
 		con = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="localhost", port="5432")
+	else:
+		con = psycopg2.connect(DATABASE_URL, sslmode="require")
 
 	db = con.cursor()
 	db.execute("SELECT * FROM fanfictions ORDER BY id")
@@ -75,10 +78,10 @@ def database():
 
 @app.route("/remove/<entry_id>")
 def remove(entry_id):
-	if not DATABASE_URL == "":
-		con = psycopg2.connect(DATABASE_URL, sslmode="require")
-	else:
+	if DATABASE_URL == "":
 		con = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="localhost", port="5432")
+	else:
+		con = psycopg2.connect(DATABASE_URL, sslmode="require")
 
 	db = con.cursor()
 	db.execute(f"DELETE FROM fanfictions WHERE id={entry_id}")
@@ -102,10 +105,10 @@ def update():
 	if "'" in data["value"]:
 		data["value"] = data["value"].replace("'", "")
 
-	if not DATABASE_URL == "":
-		con = psycopg2.connect(DATABASE_URL, sslmode="require")
-	else:
+	if DATABASE_URL == "":
 		con = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="localhost", port="5432")
+	else:
+		con = psycopg2.connect(DATABASE_URL, sslmode="require")
 
 	db = con.cursor()
 	db.execute(f"UPDATE fanfictions SET {data['column']}='{data['value']}' WHERE id={data['id']}")
@@ -116,7 +119,39 @@ def update():
 
 @app.route("/completion")
 def update_completions():
-	return bottle.template("update.html")
+	if DATABASE_URL == "":
+		con = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="localhost", port="5432")
+	else:
+		con = psycopg2.connect(DATABASE_URL, sslmode="require")
+
+	db = con.cursor()
+	db.execute("SELECT * FROM fanfictions ORDER BY id")
+	result = db.fetchall()
+
+	headers = {'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'}
+
+	def check_completion_status(url):
+		req = requests.get(url, headers=headers).text
+		soup = BeautifulSoup(req, "html.parser")
+
+		chps = soup.find_all("dd", class_="chapters")[0].text
+		chapters = chps.split("/")[0]
+		out_of = chps.split("/")[1]
+
+		if out_of == "?" or int(chapters) != int(out_of):
+			return "Incomplete"
+		else:
+			return "Complete"
+
+	for entry in result:
+		completion_status = check_completion_status(entry[1])
+		db = con.cursor()
+		db.execute(f"UPDATE fanfictions SET completion='{completion_status}' WHERE id={entry[0]}")
+
+	con.commit()
+	con.close()
+
+	return bottle.redirect("/database")
 
 @app.route("/images/<filename:re:.*\.(png|jpg|ico)>")
 def image(filename):
