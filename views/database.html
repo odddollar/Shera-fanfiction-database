@@ -37,7 +37,7 @@
         <div class="jumbotron">
             <h1 id="title" class="text-center">Database</h1>
             <h5 id="total-entries" class="text-center">Total entries: {{len(rows)}}</h5>
-            <button type="button" class="btn btn-secondary" onclick="redirect()">Update completion statuses</button>
+            <button type="button" class="btn btn-secondary text-center" data-toggle="tooltip" data-placement="top" title="See bottom of page" onclick="redirect()">Update completions</button>
             <table id="data" class="table table-striped table-condensed">
                 <thead id="column-headers">
                     <tr>
@@ -69,6 +69,14 @@
                     %end
                 </tbody>
             </table>
+        </div>
+        <hr>
+        <div id="footer" class="text-center">
+            <p id="footer-text">The "Update completions" button runs a process to check the completion status of
+            all fics in the database. It is a slow process and make take several minutes (depending on the number of
+            fics in the database). The dev (me) can't automate this updating without making this page load incredibly slowly,
+            so he (me) would greatly appreciate it if people clicked that button every now and then to update each fic's
+            completion status.</p>
         </div>
     </div>
 
