@@ -114,7 +114,7 @@ def update():
 
 	return bottle.redirect("/")
 
-@app.route("/updatecompletions")
+@app.route("/completion")
 def update_completions():
 	return bottle.template("update.html")
 
