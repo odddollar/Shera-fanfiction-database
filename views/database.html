@@ -37,6 +37,8 @@
         <div class="jumbotron">
             <h1 id="title" class="text-center">Database</h1>
             <h5 id="total-entries" class="text-center">Total entries: {{len(rows)}}</h5>
+            <h6 id="complete-entries" class="text-center">Complete: {{len(complete)}}</h6>
+            <h6 id="incomplete-entries" class="text-center">Incomplete: {{len(incomplete)}}</h6>
             <div id="update-completion-status" class="text-center mb-2">
                 <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="See bottom of page" onclick="redirect()">Update completion status</button>
             </div>

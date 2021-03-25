@@ -72,9 +72,13 @@ def database():
 	db = con.cursor()
 	db.execute("SELECT * FROM fanfictions ORDER BY id")
 	result = db.fetchall()
+	db.execute("SELECT * FROM fanfictions WHERE completion='Complete'")
+	complete = db.fetchall()
+	db.execute("SELECT * FROM fanfictions WHERE completion='Incomplete'")
+	incomplete = db.fetchall()
 	con.close()
 
-	return bottle.template("database.html", rows=result)
+	return bottle.template("database.html", rows=result, complete=complete, incomplete=incomplete)
 
 @app.route("/remove/<entry_id>")
 def remove(entry_id):
