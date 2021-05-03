@@ -10,7 +10,7 @@ if os.environ.get("APP_LOCATION") == "heroku":
 	DATABASE_URL = os.environ.get("DATABASE_URL")
 	conn = psycopg2.connect(DATABASE_URL, sslmode="require")
 else:
-	conn = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="localhost", port="5432")
+	conn = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="172.17.0.1", port="5432")
 	DATABASE_URL = ""
 	
 	db_check = conn.cursor()
@@ -50,7 +50,7 @@ def submit_handler():
 		return bottle.template("submit.html", message="unfilled")
 
 	if DATABASE_URL == "":
-		con = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="localhost", port="5432")
+		con = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="172.17.0.1", port="5432")
 	else:
 		con = psycopg2.connect(DATABASE_URL, sslmode="require")
 
@@ -64,7 +64,7 @@ def submit_handler():
 @app.route("/database")
 def database():
 	if DATABASE_URL == "":
-		con = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="localhost", port="5432")
+		con = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="172.17.0.1", port="5432")
 	else:
 		con = psycopg2.connect(DATABASE_URL, sslmode="require")
 
@@ -82,7 +82,7 @@ def database():
 @app.route("/remove/<entry_id>")
 def remove(entry_id):
 	if DATABASE_URL == "":
-		con = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="localhost", port="5432")
+		con = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="172.17.0.1", port="5432")
 	else:
 		con = psycopg2.connect(DATABASE_URL, sslmode="require")
 
@@ -109,7 +109,7 @@ def update():
 		data["value"] = data["value"].replace("'", "")
 
 	if DATABASE_URL == "":
-		con = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="localhost", port="5432")
+		con = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="172.17.0.1", port="5432")
 	else:
 		con = psycopg2.connect(DATABASE_URL, sslmode="require")
 
@@ -123,7 +123,7 @@ def update():
 @app.route("/completion")
 def update_completions():
 	if DATABASE_URL == "":
-		con = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="localhost", port="5432")
+		con = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="172.17.0.1", port="5432")
 	else:
 		con = psycopg2.connect(DATABASE_URL, sslmode="require")
 
@@ -163,4 +163,4 @@ def image(filename):
 if os.environ.get("APP_LOCATION") == "heroku":
 	bottle.run(app, host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
 else:
-	bottle.run(app, host="localhost", port=8080, debug=True)
+	bottle.run(app, host="0.0.0.0", port=8080, debug=True)
