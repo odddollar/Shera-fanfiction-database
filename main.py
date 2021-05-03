@@ -12,15 +12,14 @@ if os.environ.get("APP_LOCATION") == "heroku":
 else:
 	conn = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="localhost", port="5432")
 	DATABASE_URL = ""
-
-db_check = conn.cursor()
-db_check.execute("CREATE TABLE IF NOT EXISTS fanfictions (id SERIAL PRIMARY KEY, url TEXT, title TEXT, author TEXT, rating TEXT, warnings TEXT, universe TEXT, summary TEXT, notes TEXT)")
-db_check.execute("ALTER TABLE fanfictions ADD COLUMN IF NOT EXISTS completion TEXT")
-conn.commit()
-conn.close()
+	
+	db_check = conn.cursor()
+	db_check.execute("CREATE TABLE IF NOT EXISTS fanfictions (id SERIAL PRIMARY KEY, url TEXT, title TEXT, author TEXT, rating TEXT, warnings TEXT, universe TEXT, summary TEXT, notes TEXT)")
+	db_check.execute("ALTER TABLE fanfictions ADD COLUMN IF NOT EXISTS completion TEXT")
+	conn.commit()
+	conn.close()
 
 @app.route("/")
-@app.route("/home")
 def home():
 	return bottle.template("home.html")
 
