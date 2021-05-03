@@ -14,8 +14,7 @@ else:
 	DATABASE_URL = ""
 	
 	db_check = conn.cursor()
-	db_check.execute("CREATE TABLE IF NOT EXISTS fanfictions (id SERIAL PRIMARY KEY, url TEXT, title TEXT, author TEXT, rating TEXT, warnings TEXT, universe TEXT, summary TEXT, notes TEXT)")
-	db_check.execute("ALTER TABLE fanfictions ADD COLUMN IF NOT EXISTS completion TEXT")
+	db_check.execute("CREATE TABLE IF NOT EXISTS fanfictions (id SERIAL PRIMARY KEY, url TEXT, title TEXT, author TEXT, rating TEXT, warnings TEXT, universe TEXT, summary TEXT, notes TEXT, completion TEXT)")
 	conn.commit()
 	conn.close()
 
