@@ -21,6 +21,7 @@ else:
 	conn.commit()
 	conn.close()
 
+# function to check completion status of fic
 def check_completion_status(url):
 	headers = {'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'}
 
