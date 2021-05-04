@@ -2,6 +2,8 @@
 
 A front-end for a database created to keep track of the numerous fanfictions recommended on AO3 user [silkarc](https://archiveofourown.org/users/silkarc/)'s discord server.
 
+Docker files are for local testing only. Production version hosted natively on Heroku, not using Docker
+
 - Backend: Python using Bottle micro-framework
 - Frontend: HTML with CSS from Bootstrap
 - Database: PostgreSQL server hosted on Heroku
