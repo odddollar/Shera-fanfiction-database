@@ -9,12 +9,6 @@
     <link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon">
 
     <title>View fanfiction recommendations</title>
-
-    <script>
-        function redirect() {
-            location.href = "/completion"
-        }
-    </script>
 </head>
 <body>
     <div id="content" class="container-fluid">
@@ -39,9 +33,6 @@
             <h5 id="total-entries" class="text-center">Total entries: {{len(rows)}}</h5>
             <h6 id="complete-entries" class="text-center">Complete: {{len(complete)}}</h6>
             <h6 id="incomplete-entries" class="text-center">Incomplete: {{len(incomplete)}}</h6>
-            <div id="update-completion-status" class="text-center mb-2">
-                <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="See bottom of page" onclick="redirect()">Update completion status</button>
-            </div>
             <table id="data" class="table table-striped table-condensed">
                 <thead id="column-headers">
                     <tr>
@@ -73,14 +64,6 @@
                     %end
                 </tbody>
             </table>
-        </div>
-        <hr>
-        <div id="footer" class="text-center">
-            <p id="footer-text">The "Update completion status" button runs a process to check the completion status of
-            all fics in the database. It is an incredibly slow process and may take several minutes (depending on the number of
-            fics in the database). The dev (me) can't automate this updating without making this page load incredibly slowly,
-            so he (me) would greatly appreciate it if people clicked that button every now and then to update each fic's
-            completion status.</p>
         </div>
     </div>
 
