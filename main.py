@@ -111,23 +111,6 @@ def database():
 
 	return bottle.template("database.html", rows=result, complete=complete, incomplete=incomplete)
 
-# run remove functionality
-@app.route("/remove/<entry_id>")
-def remove(entry_id):
-	# connect to database
-	if DATABASE_URL == "":
-		con = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="172.17.0.1", port="5432")
-	else:
-		con = psycopg2.connect(DATABASE_URL, sslmode="require")
-
-	# remove record from database based on given ID
-	db = con.cursor()
-	db.execute(f"DELETE FROM fanfictions WHERE id={entry_id}")
-	con.commit()
-	con.close()
-
-	return bottle.template("remove.html", id=entry_id)
-
 # show update page
 @app.route("/update")
 def render_update():
@@ -160,6 +143,23 @@ def update():
 
 	# redirect back to home page
 	return bottle.redirect("/")
+
+# run remove functionality
+@app.route("/remove/<entry_id>")
+def remove(entry_id):
+	# connect to database
+	if DATABASE_URL == "":
+		con = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="172.17.0.1", port="5432")
+	else:
+		con = psycopg2.connect(DATABASE_URL, sslmode="require")
+
+	# remove record from database based on given ID
+	db = con.cursor()
+	db.execute(f"DELETE FROM fanfictions WHERE id={entry_id}")
+	con.commit()
+	con.close()
+
+	return bottle.template("remove.html", id=entry_id)
 
 # host static files (png, jpeg and ico)
 @app.route("/images/<filename:re:.*\.(png|jpg|ico)>")
