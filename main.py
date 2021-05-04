@@ -55,21 +55,21 @@ def submit_handler():
 	entry_data = {}
 
 	# get data from posted back form
-	entry_data["url"] = bottle.request.forms.get("url")
-	entry_data["title"] = bottle.request.forms.get("title")
-	entry_data["author"] = bottle.request.forms.get("author")
-	entry_data["rating"] = bottle.request.forms.get("rating")
-	entry_data["warnings"] = bottle.request.forms.get("warnings")
-	entry_data["universe"] = bottle.request.forms.get("universe")
-	entry_data["summary"] = bottle.request.forms.get("summary")
-	entry_data["notes"] = bottle.request.forms.get("notes")
+	entry_data["url"] = bottle.request.forms.url
+	entry_data["title"] = bottle.request.forms.title
+	entry_data["author"] = bottle.request.forms.author
+	entry_data["rating"] = bottle.request.forms.rating
+	entry_data["warnings"] = bottle.request.forms.warnings
+	entry_data["universe"] = bottle.request.forms.universe
+	entry_data["summary"] = bottle.request.forms.summary
+	entry_data["notes"] = bottle.request.forms.notes
 	entry_data["completion"] = check_completion_status(entry_data["url"])
 
 	# remove invalid characters
 	for i in entry_data.keys():
 		if entry_data[i] is "":
 			entry_data[i] = "N/A"
-		entry_data[i] = entry_data[i].replace("'", "").replace("“", "\"").replace("”", "\"")
+		entry_data[i] = entry_data[i].replace("'", "")
 
 	# prevent leaving fields unfilled
 	if (not "archiveofourown.org" in entry_data["url"]) or (entry_data["title"] == "N/A") or (entry_data["author"] == "N/A")  or (entry_data["summary"] == "N/A"):
@@ -138,12 +138,12 @@ def update():
 	data = {}
 
 	# get data from form postback
-	data["id"] = bottle.request.forms.get("id")
-	data["column"] = bottle.request.forms.get("column")
-	data["value"] = bottle.request.forms.get("value")
+	data["id"] = bottle.request.forms.id
+	data["column"] = bottle.request.forms.column
+	data["value"] = bottle.request.forms.value
 
 	# replace bad characters
-	data["value"] = data["value"].replace("'", "").replace("“", "\"").replace("”", "\"")
+	data["value"] = data["value"].replace("'", "")
 
 	# connect to database
 	if DATABASE_URL == "":
