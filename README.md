@@ -13,14 +13,22 @@ Site found at [shera-fanfiction-database.herokuapp.com](https://shera-fanfiction
 
 On the off chance someone wants to run this locally, ensure Docker is installed and added to the system ```PATH``` (if on Windows) and the Docker service is running.
 
-The app need to be started once and shutdown to allow Postgres to create the database in a Docker Volume. This initial bootup will cause an error, but this is ok. 
+The app need to be started once and shutdown to allow Postgres to create the database in a Docker Volume.
 
-Run:
+To get the app working properly, run:
 
 ```
+git clone https://github.com/odddollar/shera-fanfiction-database.git
+cd shera-fanfiction-database
 docker compose up -d
 docker compose down
 docker compose up -d
 ```
 
 Navigate to ```localhost:8080``` to see the site.
+
+To stop the Docker containers, run the following command in the cloned directory:
+
+```
+docker compose stop
+```
