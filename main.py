@@ -18,6 +18,21 @@ else:
 	conn.commit()
 	conn.close()
 
+def check_completion_status(url):
+	headers = {'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'}
+
+	req = requests.get(url, headers=headers).text
+	soup = BeautifulSoup(req, "html.parser")
+
+	chps = soup.find_all("dd", class_="chapters")[0].text
+	chapters = chps.split("/")[0]
+	out_of = chps.split("/")[1]
+
+	if out_of == "?" or int(chapters) != int(out_of):
+		return "Incomplete"
+	else:
+		return "Complete"
+
 @app.route("/")
 def home():
 	return bottle.template("home.html")
@@ -38,6 +53,7 @@ def submit_handler():
 	entry_data["universe"] = bottle.request.forms.get("universe")
 	entry_data["summary"] = bottle.request.forms.get("summary")
 	entry_data["notes"] = bottle.request.forms.get("notes")
+	entry_data["completion"] = check_completion_status(entry_data["url"])
 
 	for i in entry_data.keys():
 		if entry_data[i] is "":
@@ -54,7 +70,7 @@ def submit_handler():
 		con = psycopg2.connect(DATABASE_URL, sslmode="require")
 
 	db = con.cursor()
-	db.execute(f"INSERT INTO fanfictions (url, title, author, rating, warnings, universe, summary, notes, completion) VALUES ('{entry_data['url']}', '{entry_data['title']}', '{entry_data['author']}', '{entry_data['rating']}', '{entry_data['warnings']}', '{entry_data['universe']}', '{entry_data['summary']}', '{entry_data['notes']}', 'Unknown')")
+	db.execute(f"INSERT INTO fanfictions (url, title, author, rating, warnings, universe, summary, notes, completion) VALUES ('{entry_data['url']}', '{entry_data['title']}', '{entry_data['author']}', '{entry_data['rating']}', '{entry_data['warnings']}', '{entry_data['universe']}', '{entry_data['summary']}', '{entry_data['notes']}', '{entry_data['completion']}')")
 	con.commit()
 	con.close()
 
@@ -118,42 +134,6 @@ def update():
 	con.close()
 
 	return bottle.redirect("/")
-
-@app.route("/completion")
-def update_completions():
-	if DATABASE_URL == "":
-		con = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="172.17.0.1", port="5432")
-	else:
-		con = psycopg2.connect(DATABASE_URL, sslmode="require")
-
-	db = con.cursor()
-	db.execute("SELECT * FROM fanfictions ORDER BY id")
-	result = db.fetchall()
-
-	headers = {'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'}
-
-	def check_completion_status(url):
-		req = requests.get(url, headers=headers).text
-		soup = BeautifulSoup(req, "html.parser")
-
-		chps = soup.find_all("dd", class_="chapters")[0].text
-		chapters = chps.split("/")[0]
-		out_of = chps.split("/")[1]
-
-		if out_of == "?" or int(chapters) != int(out_of):
-			return "Incomplete"
-		else:
-			return "Complete"
-
-	for entry in result:
-		completion_status = check_completion_status(entry[1])
-		db = con.cursor()
-		db.execute(f"UPDATE fanfictions SET completion='{completion_status}' WHERE id={entry[0]}")
-
-	con.commit()
-	con.close()
-
-	return bottle.redirect("/database")
 
 @app.route("/images/<filename:re:.*\.(png|jpg|ico)>")
 def image(filename):
