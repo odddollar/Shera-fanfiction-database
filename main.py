@@ -197,7 +197,7 @@ def image(filename):
 # host robots.txt
 @app.route("/robots.txt")
 def robots():
-	return bottle.static_file("robots.txt", root="/")
+	return bottle.static_file("robots.txt", root="")
 
 # run app locally or on heroku
 if os.environ.get("APP_LOCATION") == "heroku":
