@@ -39,6 +39,16 @@ def check_completion_status(url):
 	else:
 		return "Complete"
 
+# function to connect to the relevant database
+def connect_db():
+	# connect to database
+	if DATABASE_URL == "":
+		con = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="172.17.0.1", port="5432")
+	else:
+		con = psycopg2.connect(DATABASE_URL, sslmode="require")
+
+	return con
+
 # show home page
 @app.route("/")
 def home():
@@ -75,14 +85,8 @@ def submit_handler():
 	if (not "archiveofourown.org" in entry_data["url"]) or (entry_data["title"] == "N/A") or (entry_data["author"] == "N/A")  or (entry_data["summary"] == "N/A"):
 		return bottle.template("submit.html", message="unfilled")
 
-	# connect to database
-	if DATABASE_URL == "":
-		con = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="172.17.0.1", port="5432")
-	else:
-		con = psycopg2.connect(DATABASE_URL, sslmode="require")
-
 	# insert data into database
-	db = con.cursor()
+	db = connect_db.cursor()
 	db.execute(f"INSERT INTO fanfictions (url, title, author, rating, warnings, universe, summary, notes, completion) VALUES ('{entry_data['url']}', '{entry_data['title']}', '{entry_data['author']}', '{entry_data['rating']}', '{entry_data['warnings']}', '{entry_data['universe']}', '{entry_data['summary']}', '{entry_data['notes']}', '{entry_data['completion']}')")
 	con.commit()
 	con.close()
@@ -92,14 +96,8 @@ def submit_handler():
 # show database page
 @app.route("/database")
 def database():
-	# connect to database
-	if DATABASE_URL == "":
-		con = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="172.17.0.1", port="5432")
-	else:
-		con = psycopg2.connect(DATABASE_URL, sslmode="require")
-
 	# get all entries, number of complete and incomplete
-	db = con.cursor()
+	db = connect_db.cursor()
 	db.execute("SELECT * FROM fanfictions ORDER BY id")
 	result = db.fetchall()
 	db.execute("SELECT * FROM fanfictions WHERE completion='Complete'")
@@ -113,14 +111,8 @@ def database():
 # handle postback from update completion function
 @app.route("/database", method="POST")
 def update_completion():
-	# connect to database
-	if DATABASE_URL == "":
-		con = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="172.17.0.1", port="5432")
-	else:
-		con = psycopg2.connect(DATABASE_URL, sslmode="require")
-
 	# get all database entries ordered by id
-	db = con.cursor()
+	db = connect_db.cursor()
 	db.execute("SELECT * FROM fanfictions ORDER BY id")
 	result = db.fetchall()
 
@@ -157,14 +149,8 @@ def update():
 	# replace bad characters
 	data["value"] = data["value"].replace("'", "")
 
-	# connect to database
-	if DATABASE_URL == "":
-		con = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="172.17.0.1", port="5432")
-	else:
-		con = psycopg2.connect(DATABASE_URL, sslmode="require")
-
 	# update database with new record information
-	db = con.cursor()
+	db = connect_db.cursor()
 	db.execute(f"UPDATE fanfictions SET {data['column']}='{data['value']}' WHERE id={data['id']}")
 	con.commit()
 	con.close()
@@ -175,14 +161,8 @@ def update():
 # run remove functionality
 @app.route("/remove/<entry_id>")
 def remove(entry_id):
-	# connect to database
-	if DATABASE_URL == "":
-		con = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="172.17.0.1", port="5432")
-	else:
-		con = psycopg2.connect(DATABASE_URL, sslmode="require")
-
 	# remove record from database based on given ID
-	db = con.cursor()
+	db = connect_db.cursor()
 	db.execute(f"DELETE FROM fanfictions WHERE id={entry_id}")
 	con.commit()
 	con.close()
