@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="robots" content="noindex">
+    <meta name="googlebot" content="noindex">
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
@@ -65,6 +65,24 @@
                     %end
                 </tbody>
             </table>
+        </div>
+        <hr>
+        <div id="footer">
+            <div class="row">
+                <div class="col-sm text-center">
+                    <form method="POST" action="/database">
+                        <div id="update-completion-button" class="text-center">
+                            <input type="submit" class="btn btn-dark" value="Update completion">
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm text-center">
+                    <p>The Update completion button runs a background process that checks and updates the completion status of all entries in the database. 
+                        The dev (me) does not know how to fully automate this process so here's a button that does it.</p>
+                </div>
+            </div>
         </div>
     </div>
 

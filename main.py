@@ -10,7 +10,6 @@ app = bottle.Bottle()
 # determine if running locally and setup database
 if os.environ.get("APP_LOCATION") == "heroku":
 	DATABASE_URL = os.environ.get("DATABASE_URL")
-	conn = psycopg2.connect(DATABASE_URL, sslmode="require")
 else:
 	conn = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="172.17.0.1", port="5432")
 	DATABASE_URL = ""
@@ -39,6 +38,16 @@ def check_completion_status(url):
 		return "Incomplete"
 	else:
 		return "Complete"
+
+# function to connect to the relevant database
+def connect_db():
+	# connect to database
+	if DATABASE_URL == "":
+		con = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="172.17.0.1", port="5432")
+	else:
+		con = psycopg2.connect(DATABASE_URL, sslmode="require")
+
+	return con
 
 # show home page
 @app.route("/")
@@ -76,13 +85,8 @@ def submit_handler():
 	if (not "archiveofourown.org" in entry_data["url"]) or (entry_data["title"] == "N/A") or (entry_data["author"] == "N/A")  or (entry_data["summary"] == "N/A"):
 		return bottle.template("submit.html", message="unfilled")
 
-	# connect to database
-	if DATABASE_URL == "":
-		con = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="172.17.0.1", port="5432")
-	else:
-		con = psycopg2.connect(DATABASE_URL, sslmode="require")
-
 	# insert data into database
+	con = connect_db()
 	db = con.cursor()
 	db.execute(f"INSERT INTO fanfictions (url, title, author, rating, warnings, universe, summary, notes, completion) VALUES ('{entry_data['url']}', '{entry_data['title']}', '{entry_data['author']}', '{entry_data['rating']}', '{entry_data['warnings']}', '{entry_data['universe']}', '{entry_data['summary']}', '{entry_data['notes']}', '{entry_data['completion']}')")
 	con.commit()
@@ -93,13 +97,8 @@ def submit_handler():
 # show database page
 @app.route("/database")
 def database():
-	# connect to database
-	if DATABASE_URL == "":
-		con = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="172.17.0.1", port="5432")
-	else:
-		con = psycopg2.connect(DATABASE_URL, sslmode="require")
-
 	# get all entries, number of complete and incomplete
+	con = connect_db()
 	db = con.cursor()
 	db.execute("SELECT * FROM fanfictions ORDER BY id")
 	result = db.fetchall()
@@ -111,22 +110,29 @@ def database():
 
 	return bottle.template("database.html", rows=result, complete=complete, incomplete=incomplete)
 
-# run remove functionality
-@app.route("/remove/<entry_id>")
-def remove(entry_id):
-	# connect to database
-	if DATABASE_URL == "":
-		con = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="172.17.0.1", port="5432")
-	else:
-		con = psycopg2.connect(DATABASE_URL, sslmode="require")
-
-	# remove record from database based on given ID
+# handle postback from update completion function
+@app.route("/database", method="POST")
+def update_completion():
+	# get all database entries ordered by id
+	con = connect_db()
 	db = con.cursor()
-	db.execute(f"DELETE FROM fanfictions WHERE id={entry_id}")
+	db.execute("SELECT * FROM fanfictions ORDER BY id")
+	result = db.fetchall()
+
+	# iterate through records
+	for record in result:
+		# check completion status
+		completion_status = check_completion_status(record[1])
+		
+		# update completion status
+		db = con.cursor()
+		db.execute(f"UPDATE fanfictions SET completion='{completion_status}' WHERE id={record[0]}")
+
+	# commit to database
 	con.commit()
 	con.close()
 
-	return bottle.template("remove.html", id=entry_id)
+	return bottle.redirect("/database")
 
 # show update page
 @app.route("/update")
@@ -146,13 +152,8 @@ def update():
 	# replace bad characters
 	data["value"] = data["value"].replace("'", "")
 
-	# connect to database
-	if DATABASE_URL == "":
-		con = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="172.17.0.1", port="5432")
-	else:
-		con = psycopg2.connect(DATABASE_URL, sslmode="require")
-
 	# update database with new record information
+	con = connect_db()
 	db = con.cursor()
 	db.execute(f"UPDATE fanfictions SET {data['column']}='{data['value']}' WHERE id={data['id']}")
 	con.commit()
@@ -161,13 +162,31 @@ def update():
 	# redirect back to home page
 	return bottle.redirect("/")
 
-# host static files (png, jpeg and ico)
+# run remove functionality
+@app.route("/remove/<entry_id>")
+def remove(entry_id):
+	# remove record from database based on given ID
+	con = connect_db()
+	db = con.cursor()
+	db.execute(f"DELETE FROM fanfictions WHERE id={entry_id}")
+	con.commit()
+	con.close()
+
+	return bottle.template("remove.html", id=entry_id)
+
+# host static image files (png, jpeg and ico)
 @app.route("/images/<filename:re:.*\.(png|jpg|ico)>")
 def image(filename):
 	return bottle.static_file(filename, root="images/")
+
+# host robots.txt
+@app.route("/robots.txt")
+def robots():
+	return bottle.static_file("robots.txt", root="")
 
 # run app locally or on heroku
 if os.environ.get("APP_LOCATION") == "heroku":
 	bottle.run(app, host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
 else:
 	bottle.run(app, host="0.0.0.0", port=8080, debug=True)
+	
