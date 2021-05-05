@@ -111,6 +111,35 @@ def database():
 
 	return bottle.template("database.html", rows=result, complete=complete, incomplete=incomplete)
 
+# handle postback from update completion function
+@app.route("/database", method="POST")
+def update_completion():
+	# connect to database
+	if DATABASE_URL == "":
+		con = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="172.17.0.1", port="5432")
+	else:
+		con = psycopg2.connect(DATABASE_URL, sslmode="require")
+
+	# get all database entries ordered by id
+	db = con.cursor()
+	db.execute("SELECT * FROM fanfictions ORDER BY id")
+	result = db.fetchall()
+
+	# iterate through records
+	for record in result:
+		# check completion status
+		completion_status = check_completion_status(record[1])
+		
+		# update completion status
+		db = con.cursor()
+		db.execute(f"UPDATE fanfictions SET completion='{completion_status}' WHERE id={record[0]}")
+
+	# commit to database
+	con.commit()
+	con.close()
+
+	return bottle.redirect("/database")
+
 # show update page
 @app.route("/update")
 def render_update():
