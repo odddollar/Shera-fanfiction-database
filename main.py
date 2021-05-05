@@ -189,10 +189,15 @@ def remove(entry_id):
 
 	return bottle.template("remove.html", id=entry_id)
 
-# host static files (png, jpeg and ico)
+# host static image files (png, jpeg and ico)
 @app.route("/images/<filename:re:.*\.(png|jpg|ico)>")
 def image(filename):
 	return bottle.static_file(filename, root="images/")
+
+# host robots.txt
+@app.route("/robots.txt")
+def robots():
+	return bottle.static_file("robots.txt", root="/")
 
 # run app locally or on heroku
 if os.environ.get("APP_LOCATION") == "heroku":
