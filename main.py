@@ -10,7 +10,6 @@ app = bottle.Bottle()
 # determine if running locally and setup database
 if os.environ.get("APP_LOCATION") == "heroku":
 	DATABASE_URL = os.environ.get("DATABASE_URL")
-	conn = psycopg2.connect(DATABASE_URL, sslmode="require")
 else:
 	conn = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="172.17.0.1", port="5432")
 	DATABASE_URL = ""
