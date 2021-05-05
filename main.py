@@ -86,7 +86,7 @@ def submit_handler():
 		return bottle.template("submit.html", message="unfilled")
 
 	# insert data into database
-	db = connect_db.cursor()
+	db = connect_db().cursor()
 	db.execute(f"INSERT INTO fanfictions (url, title, author, rating, warnings, universe, summary, notes, completion) VALUES ('{entry_data['url']}', '{entry_data['title']}', '{entry_data['author']}', '{entry_data['rating']}', '{entry_data['warnings']}', '{entry_data['universe']}', '{entry_data['summary']}', '{entry_data['notes']}', '{entry_data['completion']}')")
 	con.commit()
 	con.close()
@@ -97,7 +97,7 @@ def submit_handler():
 @app.route("/database")
 def database():
 	# get all entries, number of complete and incomplete
-	db = connect_db.cursor()
+	db = connect_db().cursor()
 	db.execute("SELECT * FROM fanfictions ORDER BY id")
 	result = db.fetchall()
 	db.execute("SELECT * FROM fanfictions WHERE completion='Complete'")
@@ -112,7 +112,7 @@ def database():
 @app.route("/database", method="POST")
 def update_completion():
 	# get all database entries ordered by id
-	db = connect_db.cursor()
+	db = connect_db().cursor()
 	db.execute("SELECT * FROM fanfictions ORDER BY id")
 	result = db.fetchall()
 
@@ -150,7 +150,7 @@ def update():
 	data["value"] = data["value"].replace("'", "")
 
 	# update database with new record information
-	db = connect_db.cursor()
+	db = connect_db().cursor()
 	db.execute(f"UPDATE fanfictions SET {data['column']}='{data['value']}' WHERE id={data['id']}")
 	con.commit()
 	con.close()
@@ -162,7 +162,7 @@ def update():
 @app.route("/remove/<entry_id>")
 def remove(entry_id):
 	# remove record from database based on given ID
-	db = connect_db.cursor()
+	db = connect_db().cursor()
 	db.execute(f"DELETE FROM fanfictions WHERE id={entry_id}")
 	con.commit()
 	con.close()
