@@ -77,7 +77,7 @@ def submit_handler():
 
 	# remove invalid characters
 	for i in entry_data.keys():
-		if entry_data[i] is "":
+		if entry_data[i] == "":
 			entry_data[i] = "N/A"
 		entry_data[i] = entry_data[i].replace("'", "")
 
