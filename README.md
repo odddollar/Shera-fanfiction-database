@@ -5,7 +5,7 @@ A front-end for a database created to keep track of the numerous fanfictions rec
 - Backend: Python using Bottle micro-framework
 - Frontend: HTML with CSS from Bootstrap
 - Database: PostgreSQL server hosted on Heroku
-- Entire app hosted on Heroku
+- Entire site hosted on Heroku
 
 Site found at [shera-fanfiction-database.herokuapp.com](https://shera-fanfiction-database.herokuapp.com/)
 
@@ -18,8 +18,8 @@ The app needs to be started once and shutdown to allow Postgres to create the da
 To get the app working properly, run:
 
 ```
-git clone https://github.com/odddollar/shera-fanfiction-database.git
-cd shera-fanfiction-database
+git clone https://github.com/odddollar/Shera-fanfiction-database.git
+cd Shera-fanfiction-database
 docker compose up -d
 docker compose down
 docker compose up -d
