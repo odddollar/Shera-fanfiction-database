@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 app = bottle.Bottle()
 
 # determine if running locally and setup database
-if os.environ.get("APP_LOCATION") == "heroku":
+if os.environ.get("APP_LOCATION") == "cloud":
 	DATABASE_URL = os.environ.get("DATABASE_URL")
 else:
 	conn = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="172.17.0.1", port="5432")
@@ -160,8 +160,8 @@ def image(filename):
 def robots():
 	return bottle.static_file("robots.txt", root="")
 
-# run app locally or on heroku
-if os.environ.get("APP_LOCATION") == "heroku":
+# run app locally or on cloud
+if os.environ.get("APP_LOCATION") == "cloud":
 	bottle.run(app, host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
 else:
 	bottle.run(app, host="0.0.0.0", port=8080, debug=True)
