@@ -1,3 +1,6 @@
 venv/
 README.md
 backups/
+LICENSE
+.git/
+.gitignore

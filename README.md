@@ -11,8 +11,6 @@ Site found at [shera-fanfiction-database.herokuapp.com](https://shera-fanfiction
 
 ## Running locally
 
-On the off chance someone wants to run this locally, ensure Docker is installed and added to the system ```PATH``` (if on Windows) and the Docker service is running.
-
 The app needs to be started once and shutdown to allow Postgres to create the database in a Docker Volume.
 
 To get the app working properly, run:
