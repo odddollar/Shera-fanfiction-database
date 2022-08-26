@@ -10,11 +10,18 @@ app = bottle.Bottle()
 # determine if running locally and setup database
 if os.environ.get("APP_LOCATION") == "cloud":
 	DATABASE_URL = os.environ.get("DATABASE_URL")
+
+	# create table
+	conn = psycopg2.connect(DATABASE_URL, sslmode="require")
+	db_check = conn.cursor()
+	db_check.execute("CREATE TABLE IF NOT EXISTS fanfictions (id SERIAL PRIMARY KEY, url TEXT, title TEXT, author TEXT, rating TEXT, warnings TEXT, universe TEXT, summary TEXT, notes TEXT, completion TEXT)")
+	conn.commit()
+	conn.close()
 else:
 	conn = psycopg2.connect(database="fanfictions", user="postgres", password="95283", host="172.17.0.1", port="5432")
 	DATABASE_URL = ""
 	
-	# create test table
+	# create table
 	db_check = conn.cursor()
 	db_check.execute("CREATE TABLE IF NOT EXISTS fanfictions (id SERIAL PRIMARY KEY, url TEXT, title TEXT, author TEXT, rating TEXT, warnings TEXT, universe TEXT, summary TEXT, notes TEXT, completion TEXT)")
 	conn.commit()
