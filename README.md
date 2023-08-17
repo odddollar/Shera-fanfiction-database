@@ -1,13 +1,10 @@
 # She-ra fanfiction database
 
-A front-end for a database created to keep track of the numerous fanfictions recommended on AO3 user [silkarc](https://archiveofourown.org/users/silkarc/)'s discord server.
+A front-end for a database created to keep track of numerous recommended fanfictions.
 
 - Backend: Python using Bottle micro-framework
 - Frontend: HTML with CSS from Bootstrap
 - Database: PostgreSQL server hosted on Heroku
-- Entire site hosted on Heroku
-
-Site found at [shera-fanfiction-database.onrender.com](https://shera-fanfiction-database.onrender.com/)
 
 ## Running locally
 
