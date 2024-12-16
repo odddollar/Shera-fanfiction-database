@@ -1,4 +1,4 @@
-# She-ra fanfiction database
+# She-ra Fanfiction Database
 
 A front-end for a database created to keep track of numerous recommended fanfictions.
 
